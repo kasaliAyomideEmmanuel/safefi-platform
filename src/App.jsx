@@ -475,6 +475,74 @@ function OverviewTab({ pools, wallet }) {
           ))}
         </Card>
       </div>
+
+      {/* ── Active Partners Panel ── */}
+      <div style={{ marginTop:24 }}>
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
+          <div>
+            <h2 style={{ fontSize:18, fontWeight:700, color:"#f1f5f9", margin:0 }}>Active Partner Tokens</h2>
+            <p style={{ fontSize:13, color:"#475569", margin:"4px 0 0" }}>Tokens currently integrated with SafeFi protection</p>
+          </div>
+          <div style={{ background:"rgba(0,212,255,0.1)", border:"1px solid rgba(0,212,255,0.25)", borderRadius:20, padding:"4px 14px", fontSize:12, color:"#00d4ff", fontWeight:600 }}>
+            {PARTNERS.length} Partner{PARTNERS.length !== 1 ? "s" : ""}
+          </div>
+        </div>
+
+        {PARTNERS.length === 0 ? (
+          <div style={{ background:"#0f172a", border:"2px dashed rgba(0,212,255,0.15)", borderRadius:16, padding:"40px 24px", textAlign:"center" }}>
+            <div style={{ fontSize:40, marginBottom:12 }}>🤝</div>
+            <div style={{ fontSize:16, fontWeight:600, color:"#f1f5f9", marginBottom:8 }}>No Partners Onboarded Yet</div>
+            <div style={{ fontSize:13, color:"#475569", marginBottom:20, lineHeight:1.7, maxWidth:420, margin:"0 auto 20px" }}>
+              SafeFi is actively onboarding token projects. When a partner integrates,
+              their token will appear here with live pool stats and protection status.
+            </div>
+            <div style={{ display:"inline-flex", alignItems:"center", gap:8, background:"rgba(0,255,136,0.08)", border:"1px solid rgba(0,255,136,0.2)", borderRadius:10, padding:"10px 20px" }}>
+              <span style={{ color:"#00ff88", fontSize:13, fontWeight:600 }}>→ Partner Onboarding tab to apply</span>
+            </div>
+          </div>
+        ) : (
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:16 }}>
+            {PARTNERS.map((p, i) => (
+              <div key={i} style={{ background:"linear-gradient(135deg,#0f172a,#1e293b)", border:"1px solid rgba(0,255,136,0.15)", borderRadius:16, padding:20, position:"relative", overflow:"hidden" }}>
+                <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:"linear-gradient(90deg,#00d4ff,#00ff88)" }} />
+                <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:14 }}>
+                  <div style={{ width:42, height:42, borderRadius:12, background:"rgba(0,212,255,0.1)", border:"1px solid rgba(0,212,255,0.2)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:20 }}>
+                    {p.logo || "🪙"}
+                  </div>
+                  <div>
+                    <div style={{ fontSize:15, fontWeight:700, color:"#f1f5f9" }}>{p.name}</div>
+                    <div style={{ fontSize:12, color:"#475569" }}>{p.symbol} · {p.chain}</div>
+                  </div>
+                  <div style={{ marginLeft:"auto", background:"rgba(0,255,136,0.1)", border:"1px solid rgba(0,255,136,0.25)", borderRadius:6, padding:"3px 8px", fontSize:11, color:"#00ff88", fontWeight:600 }}>
+                    ✓ LIVE
+                  </div>
+                </div>
+                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:14 }}>
+                  {[
+                    { label:"Premium Rate", value:p.premiumRate, color:"#00d4ff" },
+                    { label:"Since", value:p.onboardedDate, color:"#ffd700" },
+                  ].map((stat,j) => (
+                    <div key={j} style={{ background:"#070d1a", borderRadius:8, padding:"8px 10px" }}>
+                      <div style={{ fontSize:11, color:"#475569", marginBottom:3 }}>{stat.label}</div>
+                      <div style={{ fontSize:13, fontWeight:600, color:stat.color }}>{stat.value}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ borderTop:"1px solid rgba(255,255,255,0.05)", paddingTop:12 }}>
+                  <div style={{ fontSize:11, color:"#475569", marginBottom:4 }}>Adapter Contract</div>
+                  <div style={{ fontSize:11, color:"#94a3b8", fontFamily:"monospace" }}>{p.adapterAddress ? p.adapterAddress.slice(0,18)+"..." : "Pending deployment"}</div>
+                </div>
+                {p.website && (
+                  <a href={p.website} target="_blank" rel="noreferrer" style={{ display:"block", marginTop:12, textAlign:"center", background:"rgba(0,212,255,0.08)", border:"1px solid rgba(0,212,255,0.2)", borderRadius:8, padding:"7px", fontSize:12, color:"#00d4ff", textDecoration:"none", fontWeight:600 }}>
+                    Visit Project →
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
     </div>
   );
 }
@@ -721,7 +789,7 @@ function MyProtectionTab({ wallet, notify, connectWallet }) {
         </div>
         <div style={{ background: "linear-gradient(135deg,#0f172a,#1e293b)", border: "1px solid rgba(0,212,255,0.2)", borderRadius: 16, padding: "22px 24px", position: "relative", overflow: "hidden" }}>
           <div style={{ fontSize: 11, color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 6 }}>Protected Tokens</div>
-          <div style={{ fontSize: 28, fontWeight: 700, color: "#00d4ff", fontFamily: "monospace" }}>{DEMO_PROTECTED_TOKENS.length}</div>
+          <div style={{ fontSize: 28, fontWeight: 700, color: "#00d4ff", fontFamily: "monospace" }}>{PARTNERS.length}</div>
           <div style={{ fontSize: 12, color: "#475569", marginTop: 4 }}>Active SafeFi partners</div>
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg,transparent,#00d4ff,transparent)" }} />
         </div>
@@ -898,20 +966,31 @@ function PartnerTab({ wallet, notify, connectWallet }) {
     if (!wallet) { notify("Connect wallet to sign onboarding request", "#ffd700"); return; }
     if (!form.projectName || !form.tokenAddress) { notify("Fill all required fields", "#ff4444"); return; }
     try {
-      const msg = `SafeFi Partner Onboarding Request
-
-Project: ${form.projectName}
-Token: ${form.tokenAddress}
-Chain: ${form.chain}
-Premium Rate: ${form.premiumRate} bps
-Website: ${form.website}
-Contact: ${form.contactEmail}
-
-By signing this message I confirm I am an authorized representative of this project and agree to integrate the SafeFi protection protocol.`;
+      const msg = `SafeFi Partner Onboarding Request\n\nProject: ${form.projectName}\nToken: ${form.tokenAddress}\nChain: ${form.chain}\nPremium Rate: ${form.premiumRate} bps\nWebsite: ${form.website}\nContact: ${form.contactEmail}\n\nBy signing this message I confirm I am an authorized representative of this project and agree to integrate the SafeFi protection protocol.`;
       const sig = await window.ethereum.request({ method:"personal_sign", params:[msg, wallet] });
+
+      // Submit to Netlify Forms
+      const formData = new FormData();
+      formData.append("form-name", "partner-onboarding");
+      formData.append("projectName",  form.projectName);
+      formData.append("tokenAddress", form.tokenAddress);
+      formData.append("chain",        form.chain);
+      formData.append("tokenType",    form.tokenType);
+      formData.append("premiumRate",  form.premiumRate + " bps (" + (parseInt(form.premiumRate)/100) + "%)");
+      formData.append("website",      form.website || "—");
+      formData.append("telegram",     form.telegram || "—");
+      formData.append("twitter",      form.twitter || "—");
+      formData.append("contactEmail", form.contactEmail);
+      formData.append("description",  form.description || "—");
+      formData.append("walletAddress",wallet);
+      formData.append("signature",    sig);
+      formData.append("submittedAt",  new Date().toISOString());
+
+      await fetch("/", { method: "POST", body: formData });
+
       notify("Onboarding request signed and submitted!");
       setSubmitted(true);
-    } catch(e) { notify("Signing failed", "#ff4444"); }
+    } catch(e) { notify("Signing failed: " + (e.message||e), "#ff4444"); }
   };
 
   if (submitted) return (
@@ -938,6 +1017,17 @@ By signing this message I confirm I am an authorized representative of this proj
 
   return (
     <div style={{ animation:"fadeUp 0.4s ease", maxWidth:720, margin:"0 auto" }}>
+
+      {/* Hidden Netlify form — required for Netlify to detect the form */}
+      <form name="partner-onboarding" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+        <input type="hidden" name="form-name" value="partner-onboarding" />
+        <input name="projectName" /><input name="tokenAddress" /><input name="chain" />
+        <input name="tokenType" /><input name="premiumRate" /><input name="website" />
+        <input name="telegram" /><input name="twitter" /><input name="contactEmail" />
+        <textarea name="description"></textarea><input name="walletAddress" />
+        <input name="signature" /><input name="submittedAt" />
+      </form>
+
       <div style={{ marginBottom:28 }}>
         <h1 style={{ fontSize:30, fontWeight:700, color:"#f1f5f9", letterSpacing:"-0.02em", marginBottom:6 }}>Partner <span style={{ background:"linear-gradient(90deg,#00d4ff,#00ff88)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Onboarding</span></h1>
         <p style={{ color:"#475569", fontSize:14 }}>Integrate SafeFi protection into your token — automatic coverage for all holders from day one</p>
@@ -1037,6 +1127,26 @@ By signing this message I confirm I am an authorized representative of this proj
     </div>
   );
 }
+
+// ═══════════════════════════════════════════════════════════
+// PARTNER CONFIG — add new partners here after deployment
+// ═══════════════════════════════════════════════════════════
+const PARTNERS = [
+  // Each entry = one integrated partner token
+  // Add real partners here as they onboard
+  // {
+  //   name: "ExampleToken",
+  //   symbol: "EXT",
+  //   chain: "BNB Chain",
+  //   tokenAddress: "0x...",
+  //   adapterAddress: "0x...",
+  //   premiumRate: "0.15%",
+  //   website: "https://example.io",
+  //   telegram: "https://t.me/example",
+  //   onboardedDate: "Mar 2026",
+  //   logo: "🪙",
+  // },
+];
 
 // ═══════════════════════════════════════════════════════════
 // CONTRACTS TAB
