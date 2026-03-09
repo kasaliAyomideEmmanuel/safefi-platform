@@ -969,31 +969,33 @@ function PartnerTab({ wallet, notify, connectWallet }) {
       const msg = `SafeFi Partner Onboarding Request\n\nProject: ${form.projectName}\nToken: ${form.tokenAddress}\nChain: ${form.chain}\nPremium Rate: ${form.premiumRate} bps\nWebsite: ${form.website}\nContact: ${form.contactEmail}\n\nBy signing this message I confirm I am an authorized representative of this project and agree to integrate the SafeFi protection protocol.`;
       const sig = await window.ethereum.request({ method:"personal_sign", params:[msg, wallet] });
 
-      // Submit to Netlify Forms — must use URL-encoded body
+      // Submit to Netlify Forms
       const encode = (data) => Object.keys(data)
-        .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
+        .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(data[k] ?? ""))
         .join("&");
 
-      await fetch("/", {
+      const netlifyPayload = {
+        "form-name":   "partner-onboarding",
+        projectName:   form.projectName,
+        tokenAddress:  form.tokenAddress,
+        chain:         form.chain,
+        tokenType:     form.tokenType,
+        premiumRate:   (parseInt(form.premiumRate)/100) + "%",
+        website:       form.website || "",
+        telegram:      form.telegram || "",
+        twitter:       form.twitter || "",
+        contactEmail:  form.contactEmail,
+        description:   form.description || "",
+        walletAddress: wallet,
+        submittedAt:   new Date().toUTCString(),
+      };
+
+      const res = await fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: encode({
-          "form-name":   "partner-onboarding",
-          projectName:   form.projectName,
-          tokenAddress:  form.tokenAddress,
-          chain:         form.chain,
-          tokenType:     form.tokenType,
-          premiumRate:   form.premiumRate + " bps (" + (parseInt(form.premiumRate)/100) + "%)",
-          website:       form.website || "—",
-          telegram:      form.telegram || "—",
-          twitter:       form.twitter || "—",
-          contactEmail:  form.contactEmail,
-          description:   form.description || "—",
-          walletAddress: wallet,
-          signature:     sig,
-          submittedAt:   new Date().toISOString(),
-        })
+        body: encode(netlifyPayload),
       });
+      console.log("Netlify form response:", res.status);
 
       notify("Onboarding request signed and submitted!");
       setSubmitted(true);
