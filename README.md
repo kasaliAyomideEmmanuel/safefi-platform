@@ -205,7 +205,7 @@ SafeFi Tech Solutions Ltd — Nigeria
 
 - Platform: https://safefi-platform.netlify.app
 - Partner Onboarding: https://safefi-platform.netlify.app (Partner Onboarding tab)
-- Email: partners@safefi.io
+- Email: kasaliayomidee@gmail.com
 
 ---
 
