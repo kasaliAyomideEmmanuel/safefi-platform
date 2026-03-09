@@ -11,5 +11,23 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Netlify Forms detection — must be in index.html for React SPAs -->
+    <form name="partner-onboarding" data-netlify="true" hidden>
+      <input name="projectName" />
+      <input name="tokenAddress" />
+      <input name="chain" />
+      <input name="tokenType" />
+      <input name="premiumRate" />
+      <input name="website" />
+      <input name="telegram" />
+      <input name="twitter" />
+      <input name="contactEmail" />
+      <textarea name="description"></textarea>
+      <input name="walletAddress" />
+      <input name="signature" />
+      <input name="submittedAt" />
+    </form>
+
   </body>
 </html>
