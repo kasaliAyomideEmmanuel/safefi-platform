@@ -969,24 +969,31 @@ function PartnerTab({ wallet, notify, connectWallet }) {
       const msg = `SafeFi Partner Onboarding Request\n\nProject: ${form.projectName}\nToken: ${form.tokenAddress}\nChain: ${form.chain}\nPremium Rate: ${form.premiumRate} bps\nWebsite: ${form.website}\nContact: ${form.contactEmail}\n\nBy signing this message I confirm I am an authorized representative of this project and agree to integrate the SafeFi protection protocol.`;
       const sig = await window.ethereum.request({ method:"personal_sign", params:[msg, wallet] });
 
-      // Submit to Netlify Forms
-      const formData = new FormData();
-      formData.append("form-name", "partner-onboarding");
-      formData.append("projectName",  form.projectName);
-      formData.append("tokenAddress", form.tokenAddress);
-      formData.append("chain",        form.chain);
-      formData.append("tokenType",    form.tokenType);
-      formData.append("premiumRate",  form.premiumRate + " bps (" + (parseInt(form.premiumRate)/100) + "%)");
-      formData.append("website",      form.website || "—");
-      formData.append("telegram",     form.telegram || "—");
-      formData.append("twitter",      form.twitter || "—");
-      formData.append("contactEmail", form.contactEmail);
-      formData.append("description",  form.description || "—");
-      formData.append("walletAddress",wallet);
-      formData.append("signature",    sig);
-      formData.append("submittedAt",  new Date().toISOString());
+      // Submit to Netlify Forms — must use URL-encoded body
+      const encode = (data) => Object.keys(data)
+        .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
+        .join("&");
 
-      await fetch("/", { method: "POST", body: formData });
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode({
+          "form-name":   "partner-onboarding",
+          projectName:   form.projectName,
+          tokenAddress:  form.tokenAddress,
+          chain:         form.chain,
+          tokenType:     form.tokenType,
+          premiumRate:   form.premiumRate + " bps (" + (parseInt(form.premiumRate)/100) + "%)",
+          website:       form.website || "—",
+          telegram:      form.telegram || "—",
+          twitter:       form.twitter || "—",
+          contactEmail:  form.contactEmail,
+          description:   form.description || "—",
+          walletAddress: wallet,
+          signature:     sig,
+          submittedAt:   new Date().toISOString(),
+        })
+      });
 
       notify("Onboarding request signed and submitted!");
       setSubmitted(true);
