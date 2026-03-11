@@ -53,9 +53,6 @@ Adapter contract for ERC20 (Ethereum) partner tokens. Same functionality as BEP2
 ### SafeFiTeamAccountability.sol
 Permanent blacklist contract. Culprit wallets identified in approved claims are blacklisted on-chain, preventing future participation across all SafeFi partner tokens.
 
-### SafeFiPoolStorage.sol
-Storage contract for pool state. Separates storage from logic for upgradeability.
-
 ### TestUSDC.sol
 Test USDC token for testnet use only. Allows minting for development and testing purposes. Will be replaced by real USDC on mainnet.
 
