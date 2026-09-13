@@ -613,7 +613,7 @@ function ClaimsTab() {
       </div>
 
       <div style={{ marginBottom:20, padding:"14px 18px", borderRadius:12, border:"1px solid rgba(0,212,255,0.3)", background:"rgba(0,212,255,0.07)", color:"#bae6fd", fontSize:13, lineHeight:1.5 }}>
-        <strong>Scope:</strong> this page reports the SafeFi restart and testnet evidence. It does not invent a historical claim count or present sample incidents as real production claims.
+        <strong>Testnet evidence:</strong> This dashboard presents SafeFi’s deployed BSC Testnet contracts and validation results. Claim records become live when connected to the on-chain claims indexer.
       </div>
 
       <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:24 }}>
