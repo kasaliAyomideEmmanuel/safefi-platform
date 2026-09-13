@@ -1173,6 +1173,15 @@ function ContractsTab() {
     { num:"06a", name:"SafeFiClaimStore", label:"Claim Store", desc:"Dedicated claim data storage used by the active ClaimEngine.", addr:CONTRACTS.claimStore, color:"#a855f7" },
     { num:"06b", name:"SafeFiEligibility", label:"Eligibility Engine", desc:"40-rule engine that checks qualifying incident evidence and thresholds.", addr:"0x15E7ab3a61DDBce1143d53DB307eDa003f31b69D", color:"#a855f7" },
     { num:"06c", name:"SafeFiClaimEngine", label:"Claim Engine", desc:"Orchestrates monitored incidents, oracle checks, coverage, payout, and enforcement.", addr:CONTRACTS.claimEngine, color:"#00d4ff" },
+    { num:"07", name:"SafeFiOracleAggregator", label:"Oracle Aggregator", desc:"Combines configured price feeds and applies freshness and disagreement safeguards.", addr:CONTRACTS.oracle, color:"#00d4ff" },
+    { num:"08", name:"SafeFiBEP20Adapter", label:"BEP-20 Adapter", desc:"Partner-token integration adapter enforcing the transfer authorization and premium path.", addr:CONTRACTS.bep20Adapter, color:"#00d4ff" },
+    { num:"09", name:"SafeFiCoverageRegistry", label:"Coverage Registry", desc:"Records protected-transfer coverage receipts used by the claim process.", addr:CONTRACTS.coverageRegistry, color:"#00ff88" },
+    { num:"10", name:"SafeFiCoverageGate", label:"Coverage Gate", desc:"Checks that claims are backed by valid, unused coverage evidence.", addr:CONTRACTS.coverageGate, color:"#00ff88" },
+    { num:"11", name:"TestUSDC (reserve)", label:"Mock USDC — Reserve", desc:"Test-only reserve asset used to exercise funding, payout, and collateral accounting.", addr:"0xA6DD768593300d443cEd0f2d57dc534adFCE5EcE", color:"#64748b" },
+    { num:"12", name:"TestUSDC (partner)", label:"Mock USDC — Partner", desc:"Test-only partner token used by the protected-transfer smoke test.", addr:CONTRACTS.partnerToken, color:"#64748b" },
+    { num:"13", name:"MockPriceFeed", label:"Mock Price Feed A", desc:"Test-only oracle feed used to exercise fresh and stale price conditions.", addr:"0x78579f84dE1889428C70F36f37d7A9A73A08dD4A", color:"#64748b" },
+    { num:"14", name:"MockPriceFeed", label:"Mock Price Feed B", desc:"Second test-only feed used to exercise oracle disagreement protection.", addr:"0x9F7b3De4917a4AE123a5a192de12eE80aEe80827", color:"#64748b" },
+    { num:"15", name:"MockDEXRouter", label:"Mock DEX Router", desc:"Test-only conversion route used for adapter and premium-collector checks.", addr:"0xe81cfF4480b0Fc836962979fbb03B4e7e3529d3F", color:"#64748b" },
   ];
 
   return (
@@ -1219,8 +1228,8 @@ function ContractsTab() {
 
       <div style={{ marginTop:20, background:"linear-gradient(135deg,#0f172a,#1e293b)", border:"1px solid rgba(0,212,255,0.12)", borderRadius:16, padding:"18px 22px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
         <div>
-          <div style={{ fontWeight:600, color:"#e2e8f0", marginBottom:4 }}>Verify all transactions on BscScan</div>
-          <div style={{ fontSize:13, color:"#475569" }}>Every claim, payout and enforcement event is publicly auditable</div>
+          <div style={{ fontWeight:600, color:"#e2e8f0", marginBottom:4 }}>Inspect the complete testnet manifest on BscScan</div>
+          <div style={{ fontSize:13, color:"#475569" }}>Production-path contracts and test-only support contracts are source-verified for review</div>
         </div>
         <a href="https://testnet.bscscan.com" target="_blank" rel="noreferrer" style={{ background:"linear-gradient(135deg,#00d4ff,#00ff88)", borderRadius:12, padding:"10px 20px", color:"#070d1a", fontWeight:700, fontSize:13, textDecoration:"none", whiteSpace:"nowrap" }}>Open BscScan ↗</a>
       </div>
