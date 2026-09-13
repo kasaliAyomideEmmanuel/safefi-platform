@@ -46,13 +46,6 @@ const DEMO_POOLS = {
   protection: 144000, operational: 36000,
   yield: 24000, ecosystem: 24000, recovery: 12000,
 };
-const DEMO_CLAIMS = [
-  { id: 0, event: "LiquidityPoolDrain", loss: 1000, status: "Paused", payout: null, time: "8h ago" },
-  { id: 1, event: "LiquidityPoolDrain", loss: 1000, status: "Paused", payout: null, time: "7h ago" },
-  { id: 2, event: "LiquidityPoolDrain", loss: 1000, status: "Paused", payout: null, time: "5h ago" },
-  { id: 3, event: "LiquidityPoolDrain", loss: 1,    status: "Paused", payout: null, time: "4h ago" },
-  { id: 4, event: "LiquidityPoolDrain", loss: 1,    status: "Approved", payout: "1.00 SFI", time: "2h ago" },
-];
 const ALL_EVENTS = [
   "LiquidityPoolDrain","FlashLoanAttack","PriceManipulation","RugPull","HoneypotTrap",
   "FrontRunning","SandwichAttack","GovernanceAttack","OracleManipulation","ReentrancyAttack",
@@ -441,16 +434,17 @@ function OverviewTab({ pools, wallet }) {
         <h1 style={{ fontSize:30, fontWeight:700, color:"#f1f5f9", letterSpacing:"-0.02em", marginBottom:6 }}>
           Protocol <span style={{ background:"linear-gradient(90deg,#00d4ff,#00ff88)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Overview</span>
         </h1>
-        <p style={{ color:"#475569", fontSize:14 }}>Live stats from SafeFi smart contracts on BNB Chain</p>
+        <p style={{ color:"#475569", fontSize:14 }}>SafeFi BSC Testnet deployment, architecture, and verification evidence</p>
       </div>
 
       <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:16, marginBottom:28 }}>
         <StatCard label="Total Protected" value={total} prefix="$" accent="#00d4ff" icon="🛡️" sub="All 5 pool vaults" />
         <StatCard label="Protection Reserve" value={pools.protection} prefix="$" accent="#00ff88" icon="🏦" sub="60% of premiums" />
-        <StatCard label="SFI Minted" value="1.00" suffix=" SFI" accent="#ffd700" icon="🪙" sub="1 SFI = 1 USDC" />
-        <StatCard label="Claims Total" value={5} accent="#ff6b35" icon="📋" sub="1 approved" />
-        <StatCard label="Reserve Ratio" value="6.00" suffix="%" accent="#00ff88" icon="📊" sub="Min 5% required" />
-        <StatCard label="Event Types" value={40} accent="#a855f7" icon="⚡" sub="Attack patterns covered" />
+        <StatCard label="Deployed Contracts" value={17} accent="#00d4ff" icon="⛓️" sub="BSC Testnet" />
+        <StatCard label="Source Verified" value={17} accent="#00ff88" icon="✓" sub="BscScan" />
+        <StatCard label="Protected Transfer" value="PASS" accent="#00ff88" icon="🛡️" sub="999,000 recipient units" />
+        <StatCard label="Monitor Claim Test" value="PASS" accent="#ffd700" icon="🪙" sub="2-monitor quorum" />
+        <StatCard label="Event Types" value={40} accent="#a855f7" icon="⚡" sub="Eligibility vectors" />
       </div>
 
       <div style={{ display:"grid", gridTemplateColumns:"1.2fr 1fr", gap:20 }}>
@@ -463,13 +457,13 @@ function OverviewTab({ pools, wallet }) {
           <PoolBar label="Recovery Fund"      amount={pools.recovery}   pct={5}  color="#ff6b35" />
         </Card>
         <Card accent="#00ff88">
-          <CardTitle sub="On-chain events from ClaimEngine">Live Activity</CardTitle>
+          <CardTitle sub="Recorded testnet evidence">Deployment Activity</CardTitle>
           {[
-            { type:"Approved", label:"Claim #4 — LiquidityPoolDrain", amount:"$1.00", time:"2h ago", color:"#00ff88" },
-            { type:"Paid", label:"1.00 SFI minted to victim", amount:"1 SFI", time:"2h ago", color:"#00d4ff" },
-            { type:"Blacklisted", label:"0x000...dead enforced on TAD", amount:null, time:"2h ago", color:"#ff6b35" },
-            { type:"Funded", label:"Pool paid SFI contract", amount:"$1.00", time:"2h ago", color:"#00ff88" },
-            { type:"Submitted", label:"Claim #3 submitted", amount:"$1.00", time:"5h ago", color:"#ffd700" },
+            { type:"DEPLOYED", label:"17-contract BSC Testnet manifest", amount:"chain 97", time:"verified", color:"#00d4ff" },
+            { type:"SMOKE PASS", label:"Protected transfer + premium split", amount:"999,000 / 1,000", time:"BscScan", color:"#00ff88" },
+            { type:"CLAIM PASS", label:"Two-monitor quorum claim", amount:"999,000 SFI", time:"testnet", color:"#ffd700" },
+            { type:"SECURITY PASS", label:"Reentrancy and invariant suites", amount:"all pass", time:"local", color:"#a855f7" },
+            { type:"VERIFIED", label:"Contract sources published", amount:"17 / 17", time:"BscScan", color:"#00ff88" },
           ].map((ev,i)=>(
             <div key={i} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"11px 0", borderBottom:i<4?"1px solid rgba(255,255,255,0.04)":"none" }}>
               <div style={{ display:"flex", alignItems:"center", gap:10 }}>
@@ -609,21 +603,19 @@ function PoolsTab({ pools }) {
 // CLAIMS TAB
 // ═══════════════════════════════════════════════════════════
 function ClaimsTab() {
-  const statusColor = { Approved:"#00ff88", Paused:"#ffd700", Denied:"#ff4444", Submitted:"#00d4ff" };
   return (
     <div style={{ animation:"fadeUp 0.4s ease" }}>
       <div style={{ marginBottom:28 }}>
-        <h1 style={{ fontSize:30, fontWeight:700, color:"#f1f5f9", letterSpacing:"-0.02em", marginBottom:6 }}>Claims <span style={{ background:"linear-gradient(90deg,#00d4ff,#00ff88)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Registry</span></h1>
-        <p style={{ color:"#475569", fontSize:14 }}>Claims workflow preview for the BSC Testnet deployment</p>
+        <h1 style={{ fontSize:30, fontWeight:700, color:"#f1f5f9", letterSpacing:"-0.02em", marginBottom:6 }}>Testnet <span style={{ background:"linear-gradient(90deg,#00d4ff,#00ff88)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>Evidence</span></h1>
+        <p style={{ color:"#475569", fontSize:14 }}>What was deployed, verified, and exercised on BSC Testnet</p>
       </div>
 
-      <div style={{ marginBottom:20, padding:"14px 18px", borderRadius:12, border:"1px solid rgba(255,193,7,0.3)", background:"rgba(255,193,7,0.07)", color:"#facc15", fontSize:13, lineHeight:1.5 }}>
-        <strong>Demonstration data:</strong> the rows below are sample scenarios used to explain the claims workflow. They are not presented as a live count of production claims. The deployed ClaimEngine and ClaimStore remain publicly readable on BSC Testnet.
+      <div style={{ marginBottom:20, padding:"14px 18px", borderRadius:12, border:"1px solid rgba(0,212,255,0.3)", background:"rgba(0,212,255,0.07)", color:"#bae6fd", fontSize:13, lineHeight:1.5 }}>
+        <strong>Scope:</strong> this page reports the SafeFi restart and testnet evidence. It does not invent a historical claim count or present sample incidents as real production claims.
       </div>
 
-      {/* Stats row */}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:24 }}>
-        {[{label:"Total Claims",v:5,c:"#00d4ff"},{label:"Approved",v:1,c:"#00ff88"},{label:"Paused",v:4,c:"#ffd700"},{label:"SFI Paid",v:"1.00",c:"#ffd700"}].map((s,i)=>(
+        {[{label:"Contracts deployed",v:17,c:"#00d4ff"},{label:"Sources verified",v:"17/17",c:"#00ff88"},{label:"Eligibility vectors",v:40,c:"#a855f7"},{label:"Monitor quorum",v:"2/2",c:"#ffd700"}].map((s,i)=>(
           <div key={i} style={{ background:"#0f172a", border:`1px solid ${s.c}18`, borderRadius:14, padding:"16px 20px" }}>
             <div style={{ fontSize:11, color:"#475569", textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:6 }}>{s.label}</div>
             <div style={{ fontSize:24, fontWeight:700, color:s.c, fontFamily:"monospace" }}>{s.v}</div>
@@ -631,19 +623,20 @@ function ClaimsTab() {
         ))}
       </div>
 
-      {/* Table */}
       <Card accent="#00d4ff" style={{ padding:0, overflow:"hidden" }}>
-        <div style={{ display:"grid", gridTemplateColumns:"56px 1fr 130px 110px 110px 90px", padding:"13px 24px", borderBottom:"1px solid rgba(255,255,255,0.05)", color:"#475569", fontSize:11, letterSpacing:"0.1em", textTransform:"uppercase" }}>
-          <span>ID</span><span>Event</span><span>Loss USD</span><span>Status</span><span>Payout</span><span>Time</span>
+        <div style={{ padding:"18px 24px", borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+          <CardTitle sub="Evidence recorded from the local and BSC Testnet suites">Completed validation</CardTitle>
         </div>
-        {DEMO_CLAIMS.map((c,i)=>(
-          <div key={i} style={{ display:"grid", gridTemplateColumns:"56px 1fr 130px 110px 110px 90px", padding:"15px 24px", borderBottom:i<4?"1px solid rgba(255,255,255,0.04)":"none", alignItems:"center", background:c.status==="Approved"?"rgba(0,255,136,0.02)":"transparent", animation:`fadeUp 0.35s ease ${i*0.07}s both` }}>
-            <span style={{ fontFamily:"monospace", color:"#00d4ff", fontWeight:600 }}>#{c.id}</span>
-            <span style={{ fontSize:13, color:"#e2e8f0" }}>{c.event}</span>
-            <span style={{ fontFamily:"monospace", fontSize:13, color:"#94a3b8" }}>${fmt(c.loss)}</span>
-            <Badge color={statusColor[c.status]||"#475569"}>{c.status}</Badge>
-            <span style={{ fontFamily:"monospace", fontSize:13, color:c.payout?"#00ff88":"#334155" }}>{c.payout||"—"}</span>
-            <span style={{ fontSize:12, color:"#475569" }}>{c.time}</span>
+        {[{
+          title:"Protected transfer smoke test", detail:"Recipient received 999,000 units; PremiumCollector accrued 1,000 units; coverage receipt count increased by one.", link:"https://testnet.bscscan.com/tx/0xec1f46d38f7dcec9a914856b5399f5913611c53a629009e00d7a78c103b2115d", color:"#00ff88"
+        },{
+          title:"Two-monitor claim test", detail:"Claim 2 completed with the two configured monitor signatures; recipient received 999,000 SFI and the coverage receipt was consumed.", link:`https://testnet.bscscan.com/address/${CONTRACTS.claimEngine}#code`, color:"#ffd700"
+        },{
+          title:"Local invariant and security suites", detail:"Deterministic claim cycles, proportional distribution, rounding dust, emergency withdrawal limits, and malicious-token re-entry tests passed.", link:"https://testnet.bscscan.com/address/0x38d9d2731B3D7856482d79D1095483698974d804#code", color:"#a855f7"
+        }].map((e,i)=>(
+          <div key={i} style={{ padding:"18px 24px", borderBottom:i<2?"1px solid rgba(255,255,255,0.04)":"none", display:"flex", alignItems:"center", justifyContent:"space-between", gap:20 }}>
+            <div><div style={{ color:e.color, fontWeight:700, fontSize:13, marginBottom:5 }}>PASS · {e.title}</div><div style={{ color:"#94a3b8", fontSize:12, lineHeight:1.5 }}>{e.detail}</div></div>
+            <a href={e.link} target="_blank" rel="noreferrer" style={{ color:e.color, fontSize:12, textDecoration:"none", whiteSpace:"nowrap" }}>Inspect ↗</a>
           </div>
         ))}
       </Card>
@@ -704,12 +697,10 @@ function MyProtectionTab({ wallet, notify, connectWallet }) {
       });
       const bal = parseInt(data, 16) / 1e6;
       setSfiBalance(bal.toFixed(6));
-      // Mock claim history for demo
-      if (bal > 0) {
-        setClaimHistory([
-          { id: 4, event: "LiquidityPoolDrain", amount: bal.toFixed(2), date: "Mar 8 2026", status: "Received", txHash: "0x8a20cd5d..." },
-        ]);
-      }
+      // The connected wallet balance is live. Claim history is intentionally
+      // not fabricated here; it will be populated once an indexed event feed
+      // is connected to ClaimStore.
+      setClaimHistory([]);
       notify("Protection data loaded");
     } catch (e) {
       setSfiBalance("0.000000");
@@ -747,7 +738,7 @@ function MyProtectionTab({ wallet, notify, connectWallet }) {
           your SFI balance, and your claim history.
         </p>
         <p style={{ color: "#475569", fontSize: 13, marginBottom: 28 }}>
-          If you hold any SafeFi partner token — you are already protected from day one. No opt-in required.
+          Protection applies when a partner token uses the explicit SafeFi protected-transfer route. Ordinary transfers remain ordinary.
         </p>
         <Btn onClick={connectWallet} color="#00d4ff">Connect Wallet to Check Protection</Btn>
       </Card>
@@ -755,7 +746,7 @@ function MyProtectionTab({ wallet, notify, connectWallet }) {
       {/* How protection works — visible without wallet */}
       <div style={{ marginTop: 24 }}>
         <Card accent="#00ff88">
-          <CardTitle sub="How SafeFi protects you automatically">How Your Protection Works</CardTitle>
+          <CardTitle sub="How the SafeFi protected-transfer route works">How Your Protection Works</CardTitle>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
             {[
               { step: "01", title: "Use the Protected Route", desc: "A partner opts into SafeFi’s router; the premium is explicit and the token itself does not need to change.", color: "#00d4ff", icon: "💳" },
@@ -1056,7 +1047,7 @@ function PartnerTab({ wallet, notify, connectWallet }) {
 
       {/* Benefits banner */}
       <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:12, marginBottom:28 }}>
-        {[{icon:"🛡️",title:"Auto Protection",desc:"All holders covered instantly"},{icon:"💰",title:"0.1–0.2% Premium",desc:"Micro-fee embedded in transfers"},{icon:"⚡",title:"No Opt-in",desc:"Passive — zero user friction"}].map((b,i)=>(
+        {[{icon:"🛡️",title:"Protected route",desc:"Partner opts into the router"},{icon:"💰",title:"Explicit premium",desc:"0.1–0.2% configured fee"},{icon:"⚡",title:"Receipt-backed",desc:"Coverage evidence is recorded"}].map((b,i)=>(
           <div key={i} style={{ background:"#0f172a", border:"1px solid rgba(0,212,255,0.1)", borderRadius:14, padding:16, textAlign:"center" }}>
             <div style={{ fontSize:24, marginBottom:6 }}>{b.icon}</div>
             <div style={{ fontSize:13, fontWeight:600, color:"#e2e8f0", marginBottom:4 }}>{b.title}</div>
