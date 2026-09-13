@@ -58,7 +58,9 @@ const ALL_EVENTS = [
 ];
 
 // ── Helpers ───────────────────────────────────────────────
-const fmt = (n) => Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 });
+const fmt = (n) => typeof n === "number"
+  ? n.toLocaleString(undefined, { maximumFractionDigits: 2 })
+  : String(n);
 const truncate = (a) => a ? `${a.slice(0,6)}...${a.slice(-4)}` : "";
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
