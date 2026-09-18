@@ -2,6 +2,11 @@
 
 SafeFi is a protection protocol demonstration for partner tokens. This repository contains the React and Vite website used to explain the current BSC Testnet deployment, show validation evidence, and guide partner onboarding.
 
+[![Live Platform](https://img.shields.io/badge/Live%20Platform-safefi--platform.netlify.app-08C7D9?style=for-the-badge)](https://safefi-platform.netlify.app/)
+[![Network](https://img.shields.io/badge/Network-BNB%20Chain%20Testnet-F0B90B?style=for-the-badge)](https://testnet.bscscan.com/)
+[![Contracts](https://img.shields.io/badge/Contracts-17%20deployed-00A86B?style=for-the-badge)](https://safefi-platform.netlify.app/)
+[![License](https://img.shields.io/badge/License-MIT-334155?style=for-the-badge)](LICENSE)
+
 Live website: [safefi-platform.netlify.app](https://safefi-platform.netlify.app/)
 
 The current release is a BSC Testnet demonstration on chain ID 97. It is not a mainnet deployment, insurance product, audit certificate, or guarantee of payouts with real funds.
@@ -82,42 +87,14 @@ Partners should use the Partner Onboarding tab and the detailed integration guid
 5. Run a monitored claim test with the configured monitor quorum.
 6. Review BscScan source and transaction evidence before any production decision.
 
-## Local website development
+## Public project links
 
-Requirements: Node.js and npm.
+- [Live SafeFi platform](https://safefi-platform.netlify.app/)
+- [GitHub source repository](https://github.com/kasaliAyomideEmmanuel/safefi-platform)
+- [BSC Testnet explorer](https://testnet.bscscan.com/)
+- [Protected-transfer test transaction](https://testnet.bscscan.com/tx/0xec1f46d38f7dcec9a914856b5399f5913611c53a629009e00d7a78c103b2115d)
 
-```powershell
-cd "C:\Users\EMMANUEL\Documents\Codex\2026-09-05\https-claude-ai-share-083f05c4-f9a0\outputs\safefi-platform-main"
-npm install
-npm run dev
-```
-
-Build for Netlify or another static host:
-
-```powershell
-npm run build
-```
-
-The generated site is written to `dist`. Netlify is configured by `netlify.toml`:
-
-```toml
-[build]
-  command = "npm run build"
-  publish = "dist"
-```
-
-## GitHub and Netlify deployment
-
-Source repository: [github.com/kasaliAyomideEmmanuel/safefi-platform](https://github.com/kasaliAyomideEmmanuel/safefi-platform)
-
-```powershell
-npm run build
-git add .
-git commit -m "Describe the website update"
-git push
-```
-
-Netlify builds the `main` branch and publishes `dist`. Never commit wallet private keys, seed phrases, RPC secrets, monitor keys, `.env` files, or deployment credentials.
+The connected Netlify project builds the `main` branch and publishes the generated static site. Private keys, seed phrases, RPC secrets, monitor keys, `.env` files, and deployment credentials must never be committed.
 
 ## Repository structure
 
