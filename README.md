@@ -1,233 +1,155 @@
-# SafeFi — Decentralized Automatic Protection Protocol
+# SafeFi Testnet Platform
 
-> **Protect every DeFi token holder automatically. No opt-in. No claims. No risk.**
+SafeFi is a protection protocol demonstration for partner tokens. This repository contains the React and Vite website used to explain the current BSC Testnet deployment, show validation evidence, and guide partner onboarding.
 
-[![Live Platform](https://img.shields.io/badge/Live%20Platform-safefi--platform.netlify.app-00d4ff?style=for-the-badge)](https://safefi-platform.netlify.app)
-[![Network](https://img.shields.io/badge/Network-BNB%20Chain%20Testnet-f0b90b?style=for-the-badge)](https://testnet.bscscan.com)
-[![License](https://img.shields.io/badge/License-MIT-00ff88?style=for-the-badge)](LICENSE)
-[![Solidity](https://img.shields.io/badge/Solidity-0.8.20-363636?style=for-the-badge)](https://soliditylang.org)
+Live website: [safefi-platform.netlify.app](https://safefi-platform.netlify.app/)
 
----
+The current release is a BSC Testnet demonstration on chain ID 97. It is not a mainnet deployment, insurance product, audit certificate, or guarantee of payouts with real funds.
 
-## 🌍 The Problem
+## Product boundary
 
-Over **$12 billion** was lost to DeFi exploits in 2023–2024 alone — rug pulls, flash loan attacks, oracle manipulation, liquidity drains. When these events happen, victims receive nothing. No compensation. No recourse. No protection.
+SafeFi uses an explicit protected-transfer route. A partner token is protected when the partner and user use the configured SafeFi route, which charges an explicit premium and records coverage evidence. Ordinary token transfers remain ordinary and are not automatically treated as covered.
 
-Existing insurance solutions like Nexus Mutual require users to manually purchase coverage before an exploit, understand complex risk parameters, and file claims afterward. The result: **less than 0.1% of DeFi users are protected.**
+The website is an inspection and communication layer. Deployed contracts and BscScan transactions remain the authoritative source for chain facts.
 
----
+## Website areas
 
-## 💡 The Solution
+- **Overview** - current testnet deployment count, source-verification count, pool accounting model, and validation results.
+- **Pools** - the five-ledger premium allocation: Protection Reserve 60%, Operational Pool 15%, Yield Vault 10%, Ecosystem Pool 10%, and Recovery Fund 5%.
+- **Testnet Evidence** - protected-transfer, two-monitor claim, and local security-test evidence.
+- **My Protection** - wallet-connected SFI balance inspection. Claim history is not fabricated; a live indexed claims feed is a separate future feature.
+- **Partner Onboarding** - the information a token team needs to request integration and test the protected route.
+- **Contracts** - the complete deployed manifest with direct BscScan links.
 
-SafeFi embeds a tiny **0.1–0.2% micro-premium** directly into partner token smart contracts. Every token transfer automatically contributes to five isolated USDC reserve vaults. If an exploit is detected, SafeFi's oracle service:
+## Testnet evidence
 
-1. **Detects** the attack in under 15 seconds (40+ event types covered)
-2. **Calculates** every victim's pro-rata loss automatically
-3. **Mints SFI tokens** (1 SFI = 1 USDC always) and sends them to every affected wallet
-4. **Blacklists** the culprit wallet on-chain permanently
+| Test | Result |
+| --- | --- |
+| Protected transfer | Recipient received 999,000 units; PremiumCollector accrued 1,000 units; coverage count increased by one. |
+| Two-monitor claim | Claim 2 completed with the configured two-monitor quorum; recipient received 999,000 SFI; coverage receipt was consumed. |
+| Eligibility boundaries | All 40 qualifying event vectors passed at their exact boundary and failing one-step boundaries were rejected. |
+| Security and invariants | Randomized cashflows, proportional distribution, rounding dust, withdrawal limits, and malicious-token re-entry tests passed locally. |
+| Source verification | Deployed contracts and test-only support contracts were published with matching bytecode and ABI on BscScan. |
 
-**Zero manual claims. Zero opt-in. Fully automatic and fully on-chain.**
+Protected-transfer transaction: [view on BscScan](https://testnet.bscscan.com/tx/0xec1f46d38f7dcec9a914856b5399f5913611c53a629009e00d7a78c103b2115d).
 
----
+## Deployed contract manifest
 
-## 🔴 Live Demo
+All addresses below are BSC Testnet addresses. Mock assets and mock feeds are test-only and have no monetary value.
 
-**Platform:** https://safefi-platform.netlify.app
+| Contract | Role | Address |
+| --- | --- | --- |
+| SafeFiSFI | SFI accounting and redemption token | `0xB4c8970A91aF6a8261D27B5f41D71bf67189AfCa` |
+| SafeFiTeamAccountability | Project and culprit accountability | `0xE5837834c919507FA551A23Cde590eD6A3738C4A` |
+| SafeFiPremiumPool | Five premium accounting ledgers | `0x31E78650D330A51f4979a22b6d11d696EAD65A65` |
+| SafeFiProtectedTransferRouter | Explicit protected-transfer route | `0x5e68c37FE0aa147BB4eA88d0f4A676B02cd39131` |
+| SafeFiPremiumCollector | Partner-token premium intake | `0x5Cb49755B829e162ADa46f9B90aeDAA66FFa0e91` |
+| SafeFiClaimStore | Claim data storage | `0x69eb8A33D297765075eeD2E5D6De0960f98004f8` |
+| SafeFiEligibility | Forty-rule eligibility engine | `0x15E7ab3a61DDBce1143d53DB307eDa003f31b69D` |
+| SafeFiClaimEngine | Claim orchestration and payout flow | `0x38d9d2731B3D7856482d79D1095483698974d804` |
+| SafeFiOracleAggregator | Freshness and disagreement safeguards | `0xfb03551Cd05f1e1774B08a4386cC7A5670Ae970B` |
+| SafeFiBEP20Adapter | Partner token integration adapter | `0x26663c40A559F8b0E7c2D4e39d87AaF90a0c13eb` |
+| SafeFiCoverageRegistry | Coverage receipt records | `0xbB98552728ab48BdD77F1D4EcDD4f518c82c008f` |
+| SafeFiCoverageGate | Receipt validation and consumption | `0x399bF2B103D36222306b662036b2D59a9b44b8a9` |
+| TestUSDC reserve | Test-only reserve asset | `0xA6DD768593300d443cEd0f2d57dc534adFCE5EcE` |
+| TestUSDC partner | Test-only partner token | `0x741C99E54FADc1A141E8cAa74c9c00Ecd37340dc` |
+| MockPriceFeed A | Test-only oracle feed | `0x78579f84dE1889428C70F36f37d7A9A73A08dD4A` |
+| MockPriceFeed B | Test-only oracle feed | `0x9F7b3De4917a4AE123a5a192de12eE80aEe80827` |
+| MockDEXRouter | Test-only conversion route | `0xe81cfF4480b0Fc836962979fbb03B4e7e3529d3F` |
 
-The full claim lifecycle has been tested and verified on BNB Chain Testnet:
+The active ClaimEngine is the deployed `SafeFiClaimEngine_8.sol`. Archived duplicate engines are retained as reference and are not part of the active deployment.
 
-| Event | Details |
-|-------|---------|
-| Transaction | `0x8a20cd5d34d6f372e46e89a865a1f820ee63dda5...` |
-| Block | `94544014` |
-| Result | Claim #4 approved — 10 on-chain events fired |
-| SFI minted | 1,000,000 SFI sent to victim wallet |
-| Culprit | Blacklisted in SafeFiTeamAccountability contract |
+## How the system works
 
----
+1. A partner token uses the SafeFi protected route for a transfer.
+2. The route charges the configured premium and sends the net token amount to the recipient.
+3. PremiumCollector and PremiumPool account for the five destination ledgers.
+4. CoverageRegistry records the protected-transfer receipt.
+5. A monitored incident can be submitted to ClaimEngine.
+6. ClaimEngine checks monitor approval, oracle freshness, oracle disagreement, eligibility, and coverage evidence.
+7. Approved claims mint SFI against reserve accounting, subject to configured limits and timelocks.
+8. A receipt is consumed when it supports a payout, preventing reuse.
+9. Accountability and enforcement actions can be recorded for confirmed projects or culprits.
 
-## 🏗️ Architecture
+## Partner integration model
 
+Partners should use the Partner Onboarding tab and the detailed integration guide in the SafeFi local project:
+
+1. Confirm token compatibility and testnet addresses.
+2. Agree the premium rate and protected-transfer user experience.
+3. Configure the adapter, router, collector, and coverage relationships.
+4. Test allowance, transfer, premium, coverage, and redemption behavior on BSC Testnet.
+5. Run a monitored claim test with the configured monitor quorum.
+6. Review BscScan source and transaction evidence before any production decision.
+
+## Local website development
+
+Requirements: Node.js and npm.
+
+```powershell
+cd "C:\Users\EMMANUEL\Documents\Codex\2026-09-05\https-claude-ai-share-083f05c4-f9a0\outputs\safefi-platform-main"
+npm install
+npm run dev
 ```
-Partner Token Contract
-        │
-        │ 0.1–0.2% micro-premium on every transfer
-        ▼
-SafeFiBEP20Adapter ──────────────────────────────────────────┐
-        │                                                      │
-        ▼                                                      │
-SafeFiPremiumPool                                    SafeFiStakerRegistry
-  ├── Protection Reserve (60%)                    (tracks all holders,
-  ├── Operational Pool   (15%)                     stakers, LP providers)
-  ├── Yield Vault        (10%) ──► Aave V3 / Compound V3
-  ├── Ecosystem Pool     (10%)
-  └── Recovery Fund       (5%)
-        │
-        │ Exploit detected by Oracle Monitor (<15 seconds)
-        ▼
-SafeFiClaimEngine
-  ├── SafeFiClaimStore    (claim registry)
-  ├── SafeFiEligibility   (victim validation)
-  └── SafeFiClaimEngine   (payout execution)
-        │
-        ▼
-SafeFiSFI Token ──► Victim Wallets (1 SFI = 1 USDC)
-        │
-SafeFiTeamAccountability ──► Culprit Blacklisted On-Chain
+
+Build for Netlify or another static host:
+
+```powershell
+npm run build
 ```
 
----
+The generated site is written to `dist`. Netlify is configured by `netlify.toml`:
 
-## 📜 Smart Contracts (BNB Chain Testnet — Chain ID: 97)
-
-| Contract | Address | Purpose |
-|----------|---------|---------|
-| SafeFiSFI | `0xE75b54E53109D76896fbb0142F3e0ECd29347953` | SFI stablecoin — 1:1 USDC backed |
-| SafeFiPremiumPool | `0x17cAB26591a68E9af52B23BE0533839Eb209C422` | 5-vault premium distribution |
-| SafeFiClaimEngine | `0x2Be43Bd667401cbD31Cd154340DbE5F9285000Cd` | Automated claim processing |
-| SafeFiClaimStore | `0x832bfa5c582604c2ab53649986dc3f1066ccd4ee` | On-chain claim registry |
-| SafeFiTeamAccountability | `0x832bfa5c582604c2ab53649986dc3f1066ccd4ee` | Culprit blacklist enforcement |
-| TestUSDC | `0x64544969ed7EBf5f083679233325356EbE738930` | Test USDC for reserve backing |
-
-> All contracts are verified on [BscScan Testnet](https://testnet.bscscan.com)
-
----
-
-## ⚙️ How Integration Works
-
-Token projects integrate SafeFi in 5 steps — **no changes to their existing contract required:**
-
-1. **Contact SafeFi** via the Partner Onboarding tab on the platform
-2. **SafeFi deploys** a BEP20/ERC20 Adapter contract linked to their token
-3. **StakerRegistry** begins tracking all holders, stakers, and LP providers
-4. **Oracle Monitor** activates — 24/7 coverage across 40+ attack event types
-5. **Dashboard listing** — token appears on SafeFi platform as a Protected Partner
-
----
-
-## 🛡️ Coverage — 40+ Attack Event Types
-
-SafeFi monitors for and responds to:
-
-- Rug pulls and liquidity removal attacks
-- Flash loan price manipulation
-- Oracle manipulation and price feed attacks
-- Unauthorized minting / supply inflation
-- Governance takeover attacks
-- Sandwich attacks and MEV exploitation
-- Honeypot contract detection
-- Smart contract vulnerability exploits
-- And 32+ more attack patterns
-
----
-
-## 💰 Token Economics
-
-**SFI Token**
-- 1 SFI = 1 USDC — always, guaranteed by smart contract
-- Minted only when a claim is approved
-- Redeemable for USDC at any time
-- 100% USDC-backed reserve — no algorithmic risk
-
-**Premium Pool Split (per transfer)**
-| Pool | Share | Purpose |
-|------|-------|---------|
-| Protection Reserve | 60% | Primary victim compensation fund |
-| Operational Pool | 15% | Protocol operations |
-| Yield Vault | 10% | Aave V3 + Compound V3 yield |
-| Ecosystem Pool | 10% | Grants, partnerships, growth |
-| Recovery Fund | 5% | Catastrophic event backstop |
-
----
-
-## 🚀 Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Smart Contracts | Solidity 0.8.20, OpenZeppelin |
-| Blockchain | BNB Chain (BEP20) + Ethereum (ERC20) |
-| Frontend | React 18, Vite, CSS-in-JS |
-| Deployment | Netlify (CI/CD from GitHub) |
-| Wallet | MetaMask, ethers.js |
-| Oracle/Monitor | Node.js, ethers v6, Winston |
-| Yield | Aave V3, Compound V3 |
-| Dev Tools | Remix IDE, Hardhat-compatible |
-
----
-
-## 📁 Repository Structure
-
+```toml
+[build]
+  command = "npm run build"
+  publish = "dist"
 ```
+
+## GitHub and Netlify deployment
+
+Source repository: [github.com/kasaliAyomideEmmanuel/safefi-platform](https://github.com/kasaliAyomideEmmanuel/safefi-platform)
+
+```powershell
+npm run build
+git add .
+git commit -m "Describe the website update"
+git push
+```
+
+Netlify builds the `main` branch and publishes `dist`. Never commit wallet private keys, seed phrases, RPC secrets, monitor keys, `.env` files, or deployment credentials.
+
+## Repository structure
+
+```text
 safefi-platform/
 ├── src/
-│   ├── App.jsx          # Full platform UI — 6 tabs, wallet connect, live data
+│   ├── App.jsx          # Website interface and testnet manifest
 │   └── main.jsx         # React entry point
-├── public/
-│   └── favicon.svg      # SafeFi shield favicon
-├── index.html           # SPA entry + Netlify Forms detection
+├── index.html
 ├── package.json
+├── package-lock.json
 ├── vite.config.js
-└── netlify.toml         # Build config + SPA routing
+├── netlify.toml
+└── README.md
 ```
 
-**Smart contract source files** are available on request and will be submitted for audit prior to mainnet deployment.
+Smart-contract source files, deployment scripts, manifests, verification input, detailed test reports, and partner integration documentation are maintained in the separate `outputs/safefi-local` project.
 
----
+## Security and production boundary
 
-## 🗺️ Roadmap
+The current system is suitable for testnet demonstration and partner conversations. Before real funds or mainnet deployment, the project still needs:
 
-| Phase | Timeline | Milestone |
-|-------|----------|-----------|
-| ✅ Phase 1 | Q1 2026 | Testnet deployment, full claim lifecycle tested, platform live |
-| 🔄 Phase 2 | Q2 2026 | Smart contract audit (Certik/Hacken), testnet partners onboarded |
-| 📋 Phase 3 | Q3 2026 | Mainnet launch, 10+ partner tokens, reserve capitalized to $3M+ |
-| 📋 Phase 4 | Q4 2026 | Multi-chain expansion (Ethereum, Polygon), 50+ partners, DAO governance |
+- independent smart-contract audit and remediation;
+- production oracle providers and monitoring;
+- multisig governance and operational key management;
+- economic, reserve, and stress-model review;
+- legal and regulatory review;
+- production incident response, alerting, and recovery drills;
+- a live indexed claims interface linked to on-chain events.
 
----
+Passing the test suite, deploying to testnet, and publishing source code do not by themselves establish production readiness, insurance status, regulatory approval, or guaranteed compensation.
 
-## 💵 Funding
+## License
 
-SafeFi is raising a **$500K Seed Round** to fund:
-- Smart contract audit — $150K
-- Engineering & development — $125K
-- Business development — $100K
-- Operations & legal — $75K
-- Initial protocol reserve seed — $50K
-
-A subsequent **$3M–$5M Strategic Round** will capitalize the Protection Reserve pools before mainnet launch, ensuring every victim can be paid from day one.
-
----
-
-## 👨‍💻 Founder
-
-**Kasali Ayomide Emmanuel**
-SafeFi Tech Solutions Ltd — Nigeria
-
-- Platform: https://safefi-platform.netlify.app
-- Partner Onboarding: https://safefi-platform.netlify.app (Partner Onboarding tab)
-- Email: kasaliayomidee@gmail.com
-
----
-
-## 🔒 Security & Audit Status
-
-| Item | Status |
-|------|--------|
-| Testnet deployment | ✅ Complete |
-| End-to-end claim test | ✅ Verified on-chain |
-| Open source contracts | ✅ Readable on BscScan |
-| Smart contract audit | 🔄 Planned — Certik/Hacken pre-mainnet |
-| Multisig treasury | 🔄 Planned — Gnosis Safe pre-mainnet |
-| Mainnet deployment | 🔄 Post-audit only |
-
-> **SafeFi will never deploy to mainnet without a clean audit report.**
-
----
-
-## 📄 License
-
-MIT License — see [LICENSE](LICENSE) for details.
-
----
-
-*SafeFi — Making DeFi safe for everyone, automatically.*
+MIT License. See [LICENSE](LICENSE) for details.
