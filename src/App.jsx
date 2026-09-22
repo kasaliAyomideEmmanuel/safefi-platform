@@ -369,7 +369,7 @@ export default function SafeFiApp() {
       {/* ── HEADER ── */}
       <header style={{ position:"sticky", top:0, zIndex:100, background:"rgba(7,13,26,0.94)", backdropFilter:"blur(20px)", borderBottom:"1px solid rgba(255,255,255,0.05)", padding:"0 28px", height:64, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
         <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-          <img src={`data:image/png;base64,${LOGO_B64}`} alt="SafeFi" style={{ width:42, height:42, objectFit:"contain", filter:"drop-shadow(0 0 10px rgba(0,220,80,0.5))" }} />
+          <img src="/safefi-logo-transparent.png" alt="SafeFi" style={{ width:42, height:42, objectFit:"contain", filter:"drop-shadow(0 0 10px rgba(0,220,80,0.5))" }} />
           <div>
             <div style={{ fontWeight:700, fontSize:17, letterSpacing:"0.04em", color:"#f1f5f9" }}>Safe<span style={{ color:"#39ff14" }}>Fi</span></div>
             <div style={{ fontSize:9, color:"#334155", letterSpacing:"0.12em" }}>PROTECTION PROTOCOL</div>
