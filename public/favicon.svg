@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title>SafeFi</title>
+  <desc>SafeFi shield mark</desc>
+  <defs>
+    <linearGradient id="bg" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0d2038"/>
+      <stop offset="1" stop-color="#06101f"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="19" y1="13" x2="46" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#20e6ff"/>
+      <stop offset="1" stop-color="#00a6c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <path d="M32 9 49 16v14c0 11.2-6.6 20.7-17 25C21.6 50.7 15 41.2 15 30V16l17-7Z" fill="url(#shield)"/>
+  <path d="M32 14 44 19v11c0 7.9-4.4 14.8-12 18.6C24.4 44.8 20 37.9 20 30V19l12-5Z" fill="#08182b"/>
+  <path d="M29 22h6v8h8v6h-8v8h-6v-8h-8v-6h8v-8Z" fill="#20e6ff"/>
+</svg>
